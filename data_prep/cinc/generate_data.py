@@ -43,8 +43,9 @@ if __name__ == '__main__':
         resampled_ecg = signal.resample(ecg[:8909], 7424)
         ecg_data += [resampled_ecg]
         ecg_labels_i += [[LABEL_MAP_BINARY[item[1]]]]        
-    ecg_labels = [[keras.utils.to_categorical(ii, 2) for ii in ss] for ss in ecg_labels_i]
-    ecg_labels = np.squeeze(ecg_labels)
+    ecg_labels = ecg_labels_i
+    ecg_labels = np.array(ecg_labels)
+    print(ecg_labels.shape)
     ecg_data = np.array(ecg_data)    
 
     # Expand dims
@@ -72,3 +73,4 @@ if __name__ == '__main__':
     np.save(file_path, train_data)
     file_path = os.path.join(args.out, 'train_labels.npy')
     np.save(file_path, train_labels)
+    print(eval_labels.shape)
