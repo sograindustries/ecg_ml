@@ -35,6 +35,13 @@ train_labels_cat = np.zeros((train_labels.shape[0], 2))
 for ii in range(train_labels_cat.shape[0]):                         
     train_labels_cat[ii, :] = keras.utils.to_categorical(train_labels[ii], 2)
 
+# Normalizes data by mean and std. dev.
+for ii in range(eval_data.shape[0]):
+    eval_data[ii, :, 0] = (eval_data[ii, :, 0] - np.mean(eval_data[ii, :, 0])) / np.std(eval_data[ii, :, 0])
+for ii in range(train_data.shape[0]):
+    train_data[ii, :, 0] = (train_data[ii, :, 0] - np.mean(train_data[ii, :, 0])) / np.std(train_data[ii, :, 0])
+
+    
 np.save('./eval_data', eval_data)
 np.save('./eval_labels', eval_labels_cat)
 np.save('./train_data', train_data)
