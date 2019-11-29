@@ -10,6 +10,8 @@ TRAINED_MODEL="${MODEL_DIR}/trained.h5"
 GRAPHDEF_FILE="${MODEL_DIR}/frozen"
 TFLITE_FILE="${MODEL_DIR}/trained_model.tflite"
 
+mkdir -p "${MODEL_DIR}"
+
 # Build Model.
 python scripts/build_and_save.py --out "${UNTRAINED_MODEL}"
 
