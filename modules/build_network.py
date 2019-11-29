@@ -3,32 +3,24 @@ from keras import backend as K
 
 STRIDE = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1]
 CHANNEL_GROWTH = [1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1]
-
-def zeropad(layer):
-    zeros = K.zeros_like(layer)
-    return K.concatenate([layer, zeros], axis=2)
-
-def zeropad_output_shape(input_shape):
-    shape = list(input_shape)
-    shape[2] *= 2
-    return tuple(shape)
+KERNEL_SIZE = 16
 
 def build_network():
     input_layer = keras.layers.Input(shape=[7424, 1], dtype='float32', name='input')
 
     # First layer
-    layer = keras.layers.Conv1D(filters=32, kernel_size=16, strides=1, padding='same', use_bias=False)(input_layer)
+    layer = keras.layers.Conv1D(filters=32, kernel_size=KERNEL_SIZE, strides=1, padding='same', use_bias=False)(input_layer)
     layer = keras.layers.BatchNormalization()(layer)
     layer = keras.layers.Activation('relu')(layer)
     layer = keras.layers.Dropout(0.5)(layer)
 
     # Creates first resnet layer
     shortcut = keras.layers.MaxPooling1D(pool_size=2, strides=1, padding='same')(layer)
-    layer = keras.layers.SeparableConv1D(filters=32, kernel_size=16, strides=1, padding='same', use_bias=False)(layer)
+    layer = keras.layers.SeparableConv1D(filters=32, kernel_size=KERNEL_SIZE, strides=1, padding='same', use_bias=False)(layer)
     layer = keras.layers.BatchNormalization()(layer)
     layer = keras.layers.Activation('relu')(layer)
  #   layer = keras.layers.SpatialDropout1D(0.2)(layer)
-    layer = keras.layers.SeparableConv1D(filters=32, kernel_size=16, strides=1, padding='same', use_bias=False)(layer)
+    layer = keras.layers.SeparableConv1D(filters=32, kernel_size=KERNEL_SIZE, strides=1, padding='same', use_bias=False)(layer)
     layer = keras.layers.Add()([shortcut, layer])
 
     # Creates 15 Resnet blocks
@@ -38,14 +30,14 @@ def build_network():
         filters *= channel_mult
         shortcut = keras.layers.MaxPooling1D(pool_size=2, strides=STRIDE[block], padding='same')(layer)
         if channel_mult > 1:
-            shortcut = keras.layers.Lambda(zeropad, output_shape=zeropad_output_shape)(shortcut)
+            shortcut = keras.layers.SeparableConv1D(filters=filters, kernel_size=1, strides=1, padding='same', use_bias=False)(shortcut)
         layer = keras.layers.BatchNormalization()(layer)
         layer = keras.layers.Activation('relu')(layer)
-        layer = keras.layers.SeparableConv1D(filters=filters, kernel_size=16, strides=STRIDE[block], padding='same', use_bias=False)(layer)
+        layer = keras.layers.SeparableConv1D(filters=filters, kernel_size=KERNEL_SIZE, strides=STRIDE[block], padding='same', use_bias=False)(layer)
         layer = keras.layers.BatchNormalization()(layer)
         layer = keras.layers.Activation('relu')(layer)
 #        layer = keras.layers.SpatialDropout1D(0.2)(layer)
-        layer = keras.layers.SeparableConv1D(filters=filters, kernel_size=16, strides=1, padding='same', use_bias=False)(layer)
+        layer = keras.layers.SeparableConv1D(filters=filters, kernel_size=KERNEL_SIZE, strides=1, padding='same', use_bias=False)(layer)
         layer = keras.layers.Add()([shortcut, layer])
 
     # Final layer
