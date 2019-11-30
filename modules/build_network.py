@@ -31,6 +31,7 @@ def build_network():
         shortcut = keras.layers.MaxPooling1D(pool_size=2, strides=STRIDE[block], padding='same')(layer)
         if channel_mult > 1:
             shortcut = keras.layers.SeparableConv1D(filters=filters, kernel_size=1, strides=1, padding='same', use_bias=False)(shortcut)
+            shortcut = keras.layers.BatchNormalization()(shortcut)
         layer = keras.layers.BatchNormalization()(layer)
         layer = keras.layers.Activation('relu')(layer)
         layer = keras.layers.SeparableConv1D(filters=filters, kernel_size=KERNEL_SIZE, strides=STRIDE[block], padding='same', use_bias=False)(layer)

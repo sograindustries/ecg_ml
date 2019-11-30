@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     model_dir = os.path.dirname(args.model)
     
-    stopping = keras.callbacks.EarlyStopping(patience=12)
+    stopping = keras.callbacks.EarlyStopping(patience=24)
     checkpoints = keras.callbacks.ModelCheckpoint(os.path.join(model_dir, 'weights.{epoch:02d}-{val_loss:.2f}.hdf5'), verbose = 1)
     reduce_lr = keras.callbacks.ReduceLROnPlateau(
         factor=0.1,
