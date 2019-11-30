@@ -29,10 +29,10 @@ print('Training PS data size: {}x{}x{}'.format(*ps_train_data.shape))
 print('Eval PS data size: {}x{}x{}'.format(*ps_eval_data.shape))
 
 
-eval_data = np.concatenate((cinc_eval_data, mit_eval_data), 0)
-eval_labels = np.concatenate((cinc_eval_labels, mit_eval_labels), 0)
-train_data = np.concatenate((cinc_train_data, mit_train_data), 0)
-train_labels = np.concatenate((cinc_train_labels, mit_train_labels), 0)
+eval_data = mit_eval_data #np.concatenate((mit_eval_data), 0)
+eval_labels = mit_eval_labels #np.concatenate((cinc_eval_labels, mit_eval_labels), 0)
+train_data = mit_train_data #np.concatenate((cinc_train_data, mit_train_data), 0)
+train_labels = mit_train_labels #np.concatenate((cinc_train_labels, mit_train_labels), 0)
 
 print('Training data size: {}x{}x{}'.format(*train_data.shape))
 print('Eval data size: {}x{}x{}'.format(*eval_data.shape))
