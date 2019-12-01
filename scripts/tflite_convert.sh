@@ -7,7 +7,7 @@ tflite_convert \
 --graph_def_file="$GRAPH_DEF_FILE" \
 --output_file="$TFLITE_FILE" \
 --output_format=TFLITE \
---input_shapes=1,7424,1 \
+--input_shapes=1,2560,1 \
 --input_arrays='input' \
 --output_arrays='output/Softmax'
 
@@ -15,7 +15,7 @@ tflite_convert \
 --output_file="${TFLITE_FILE}.quant" \
 --graph_def_file="$GRAPH_DEF_FILE" \
 --inference_type=QUANTIZED_UINT8 \
---input_shapes=1,7424,1 \
+--input_shapes=1,2560,1 \
 --input_arrays='input' \
 --output_arrays='output/Softmax' \
 --mean_values=128 \

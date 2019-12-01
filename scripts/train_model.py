@@ -32,13 +32,13 @@ if __name__ == '__main__':
 
     model_dir = os.path.dirname(args.model)
     
-    stopping = keras.callbacks.EarlyStopping(patience=24)
+    stopping = keras.callbacks.EarlyStopping(patience=12)
     checkpoints = keras.callbacks.ModelCheckpoint(os.path.join(model_dir, 'weights.{epoch:02d}-{val_loss:.2f}.hdf5'), verbose = 1)
     reduce_lr = keras.callbacks.ReduceLROnPlateau(
         factor=0.1,
         patience=2,
         min_lr=0.001 * 0.001)
-    batch_size = 12
+    batch_size = 32
     model.fit(train_data, train_labels,
           batch_size = batch_size,
           shuffle = True,
